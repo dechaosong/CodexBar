@@ -428,7 +428,8 @@ extension UsageStore {
                         authFingerprint: authFingerprint ?? (requiresLiveAuth ? nil : account.authFingerprint),
                         workspaceAccountID: authFingerprint == nil && requiresLiveAuth
                             ? nil
-                            : (workspaceAccountID ?? account.workspaceAccountID)))
+                            // Managed workspace selection is metadata-only; auth.json can retain its default workspace.
+                            : (account.workspaceAccountID ?? workspaceAccountID)))
             })
         let visibleAccounts = projection.visibleAccounts.map { account in
             guard case let .managedAccount(id) = account.selectionSource else { return account }
