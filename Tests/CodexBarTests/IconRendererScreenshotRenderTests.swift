@@ -67,7 +67,35 @@ final class IconRendererScreenshotRenderTests: XCTestCase {
         print("Wrote \(url.lastPathComponent)")
     }
 
-    private static func proofPNG(icon: NSImage) -> Data? {
+    func test_renderSyntheticSingleQuotaStatusBadge() throws {
+        guard let dir = ProcessInfo.processInfo.environment["CODEXBAR_STATUS_ICON_PROOF_DIR"] else {
+            throw XCTSkip("Set CODEXBAR_STATUS_ICON_PROOF_DIR to render the status badge proof.")
+        }
+        let directory = URL(fileURLWithPath: dir, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+
+        let icon = IconRenderer.makeIcon(
+            primaryRemaining: 100,
+            weeklyRemaining: nil,
+            creditsRemaining: nil,
+            stale: false,
+            style: .combined,
+            statusIndicator: .minor,
+            hideCritters: true,
+            quotaLayoutPolicy: .provider(.codex))
+        let data = try XCTUnwrap(
+            Self.proofPNG(icon: icon, title: "Minor provider issue", subtitle: "single quota"),
+            "synthetic status badge proof render failed")
+        let url = directory.appendingPathComponent("codex-single-quota-status-badge-after.png")
+        try data.write(to: url, options: .atomic)
+        print("Wrote \(url.lastPathComponent)")
+    }
+
+    private static func proofPNG(
+        icon: NSImage,
+        title: String = "Synthetic proof",
+        subtitle: String = "46% remaining") -> Data?
+    {
         guard let representation = NSBitmapImageRep(
             bitmapDataPlanes: nil,
             pixelsWide: Int(canvasSize.width),
@@ -100,10 +128,10 @@ final class IconRendererScreenshotRenderTests: XCTestCase {
             .foregroundColor: NSColor(white: 0.72, alpha: 1),
             .paragraphStyle: paragraph,
         ]
-        NSString(string: "Synthetic proof").draw(
+        NSString(string: title).draw(
             in: NSRect(x: 24, y: 192, width: 312, height: 36),
             withAttributes: titleAttributes)
-        NSString(string: "46% remaining").draw(
+        NSString(string: subtitle).draw(
             in: NSRect(x: 24, y: 158, width: 312, height: 32),
             withAttributes: subtitleAttributes)
 
