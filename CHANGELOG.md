@@ -8,10 +8,11 @@
 - Codex: avoid repeated full scans after trace-log pruning, while retaining the latest validated cost history through temporary trace-database failures (#3318). Thanks @brzvsk!
 
 ### Fixed
-- Codex: keep selected managed workspaces attached to their stacked usage rows instead of replacing them with the auth file's default workspace (#3347). Thanks @krevoit!
+- Grok: restore 0% usage for a validated active billing period with an omitted usage scalar, preserving unknown usage for incomplete responses (#3261, #3325). Thanks @sf-jin-ku and @olddonkey!
 - Menu bar: keep status components and website links scoped to their provider when switching cached tabs, preventing Claude status from appearing under Grok or Codex (#3320). Thanks @gianpaj!
 - Usage & Spend: keep stalled or failed Codex catch-up paused until explicit Refresh, preventing background synchronization from restarting CPU-heavy scans (partial fix for #3316). Thanks @heyajulia!
 - Xiaomi MiMo: prevent overlapping local usage tracker updates from colliding on a shared temporary cache file, preserving atomic publication (#3321). Thanks @Lucenx9!
+- Codex: keep selected managed workspaces attached to their stacked usage rows instead of replacing them with the auth file's default workspace (#3347). Thanks @krevoit!
 - Claude: avoid duplicated “Resets Reset” labels when CLI usage supplies a singular reset description (#3317). Thanks @Aternus!
 
 ## 0.56.2 — 2026-08-31
